@@ -1,7 +1,7 @@
 # 🏅 Sports Celebrity Video Reel Generator
 
 This application allows users to input a sports celebrity's name and sport, then automatically generates a short video reel (60–90 seconds) highlighting the celebrity's career and achievements. The entire process is automated using AI services.
-
+(Video Generation may takes 1-2 min)
 ---
 
 ## 🚀 Features
