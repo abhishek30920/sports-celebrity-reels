@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { ArrowRight, Video, Wand2, Smartphone, ChevronDown } from "lucide-react"
 import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
+import Header from "@/components/header"
 
 export default function Home() {
   const [scrolled, setScrolled] = useState(false)
@@ -21,7 +22,7 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen antialiased bg-gray-50">
       {/* Navigation */}
-     
+     <Header/>
 
       <main className="flex-1">
         {/* Hero Section */}

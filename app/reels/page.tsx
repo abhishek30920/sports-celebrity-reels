@@ -1,3 +1,4 @@
+// app/reels/page.tsx
 'use client'
 import { ReelContainer } from "@/components/reels/reel-container"
 
