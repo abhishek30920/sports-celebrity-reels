@@ -1,5 +1,6 @@
 "use client"
 
+import type React from "react"
 import { useState, useRef, useEffect } from "react"
 import { ReelControls } from "./reel-controls"
 import type { Video } from "@/types/video"
@@ -17,100 +18,105 @@ export function ReelItem({ video, isActive, onNext, onPrevious }: ReelItemProps)
   const [progress, setProgress] = useState(0)
   const videoRef = useRef<HTMLVideoElement>(null)
   const isMobile = useMobile()
-
-  // Control playback when video becomes active/inactive
+  
   useEffect(() => {
-    const vid = videoRef.current
-    if (!vid) return
-
     if (isActive) {
-      vid.play().catch(console.error)
+      videoRef.current?.play().catch((err) => console.error("Error playing video:", err))
       setIsPlaying(true)
     } else {
-      vid.pause()
+      videoRef.current?.pause()
       setIsPlaying(false)
     }
   }, [isActive])
-
-  // Track playback progress
+  
   useEffect(() => {
-    const vid = videoRef.current
-    if (!vid) return
-
     const updateProgress = () => {
-      if (vid.duration > 0) {
-        setProgress((vid.currentTime / vid.duration) * 100)
+      if (videoRef.current) {
+        const { currentTime, duration } = videoRef.current
+        setProgress((currentTime / duration) * 100)
       }
     }
-
-    vid.addEventListener("timeupdate", updateProgress)
+    
+    const videoElement = videoRef.current
+    if (videoElement) {
+      videoElement.addEventListener("timeupdate", updateProgress)
+    }
+    
     return () => {
-      vid.removeEventListener("timeupdate", updateProgress)
+      if (videoElement) {
+        videoElement.removeEventListener("timeupdate", updateProgress)
+      }
     }
   }, [])
-
+  
   const togglePlayPause = () => {
-    const vid = videoRef.current
-    if (!vid) return
-
-    if (isPlaying) {
-      vid.pause()
-    } else {
-      vid.play().catch(console.error)
+    if (videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.pause()
+      } else {
+        videoRef.current.play().catch((err) => console.error("Error playing video:", err))
+      }
+      setIsPlaying(!isPlaying)
     }
-    setIsPlaying(!isPlaying)
   }
-
-  // Swipe detection (optimized)
-  const touchStartY = useRef<number | null>(null)
-
+  
+  // Handle touch events for mobile swipe gestures
   const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartY.current = e.touches[0].clientY
-  }
-
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (touchStartY.current === null) return
-
-    const deltaY = touchStartY.current - e.changedTouches[0].clientY
-
-    // Only trigger swipe if active
-    if (Math.abs(deltaY) > 50 && isActive) {
-      deltaY > 0 ? onNext() : onPrevious()
+    const touchStartY = e.touches[0].clientY
+    
+    const handleTouchMove = (e: TouchEvent) => {
+      const touchY = e.touches[0].clientY
+      const diff = touchStartY - touchY
+      
+      // Threshold for swipe detection
+      if (Math.abs(diff) > 50) {
+        if (diff > 0) {
+          // Swipe up - next video
+          onNext()
+        } else {
+          // Swipe down - previous video
+          onPrevious()
+        }
+        document.removeEventListener("touchmove", handleTouchMove)
+        document.removeEventListener("touchend", handleTouchEnd)
+      }
     }
-
-    touchStartY.current = null
+    
+    const handleTouchEnd = () => {
+      document.removeEventListener("touchmove", handleTouchMove)
+      document.removeEventListener("touchend", handleTouchEnd)
+    }
+    
+    document.addEventListener("touchmove", handleTouchMove)
+    document.addEventListener("touchend", handleTouchEnd)
   }
-
+  
   return (
-    <div
-      className={`h-screen w-full relative snap-start transition-opacity duration-200 ${!isActive ? 'opacity-60 pointer-events-none' : 'opacity-100'}`}
+    <div 
+      className={`h-screen w-full relative snap-start ${!isActive ? 'opacity-80' : 'opacity-100'}`}
       onTouchStart={isMobile ? handleTouchStart : undefined}
-      onTouchEnd={isMobile ? handleTouchEnd : undefined}
       onClick={togglePlayPause}
     >
-      {/* Top progress bar */}
       <div className="absolute top-0 left-0 w-full h-1 bg-gray-700 z-10">
-        <div className="h-full bg-white" style={{ width: `${progress}%` }} />
+        <div 
+          className="h-full bg-white" 
+          style={{ width: `${progress}%` }}
+        />
       </div>
-
-      {/* Video */}
+      
       <video
         ref={videoRef}
         src={video.url}
         className="absolute inset-0 w-full h-full object-cover"
         loop
         playsInline
-        preload="metadata"
-        muted // <- for autoplay on mobile
       />
-
-      {/* Caption */}
+      
       <div className="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black/80 to-transparent">
-        <h3 className="text-xl font-bold text-white mb-1">{video.title}</h3>
+        <h3 className="text-xl font-bold text-white mb-2">{video.title}</h3>
         <p className="text-white/80 text-sm">{video.description}</p>
       </div>
-
-      {/* Controls */}
+      
       <ReelControls
         isPlaying={isPlaying}
         onPlayPause={togglePlayPause}
@@ -120,7 +126,7 @@ export function ReelItem({ video, isActive, onNext, onPrevious }: ReelItemProps)
         shares={video.shares || 0}
       />
 
-      {/* Scroll hint */}
+      {/* Desktop scroll hint */}
       <div className="hidden md:block absolute bottom-24 left-1/2 transform -translate-x-1/2 text-white text-opacity-60 text-sm animate-pulse">
         <p>Scroll to navigate</p>
       </div>
