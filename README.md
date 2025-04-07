@@ -1,0 +1,105 @@
+# 🏅 Sports Celebrity Video Reel Generator
+
+This application allows users to input a sports celebrity's name and sport, then automatically generates a short video reel (60–90 seconds) highlighting the celebrity's career and achievements. The entire process is automated using AI services.
+
+---
+
+## 🚀 Features
+
+- **AI-Powered Script Generation**  
+  Automatically generates engaging and factual narratives.
+
+- **Automated Image Sourcing**  
+  Finds relevant images to visually support the story.
+
+- **Text-to-Speech Conversion**  
+  Converts scripts to natural-sounding voiceovers using Amazon Polly.
+
+- **Professional Video Composition**  
+  Combines audio and visuals with transitions and timing.
+
+- **Cloud Storage & Delivery**  
+  Stores generated videos on AWS S3 and serves them via a responsive frontend.
+
+---
+
+## 🏗️ Technical Architecture
+
+#### 🔄 Video Generation Pipeline
+
+User Request → Script Generation → Image Sourcing → Text-to-Speech → Video Composition → S3 Storage
+
+
+
+### 🧩 API Routes
+
+| Route                  | Description                                 |
+|------------------------|---------------------------------------------|
+| `/api/generate-video`  | Handles the full video generation process   |
+| `/api/videos`          | Lists all generated videos                  |
+| `/api/videos/[id]`     | Retrieves a specific video by ID and also
+|                             we can delete it                           |
+
+---
+
+## 🧠 AI Integration
+
+### ✍️ Script Generation (`script-generator.ts`)
+
+- Uses **Google Gemini 1.5 Pro** for generating content
+- Produces factual and engaging scripts (150–225 words)
+- Tailored around the athlete’s achievements and milestones
+
+### 🖼️ Image Sourcing (`image-sourcer.ts`)
+
+- Extracts key moments from the generated script
+- Uses **SERP API** to perform Google Image searches
+- Includes fallback to placeholder images when necessary
+
+### 🔊 Text-to-Speech (`text-to-speech.ts`)
+
+- Powered by **Amazon Polly**
+- Uses the high-quality **"Matthew"** neural voice for narration
+
+---
+
+## 🎬 Video Processing
+
+### 🧱 Video Composition (`composer.ts`)
+
+- Uses **FFmpeg** for professional-grade video generation
+- Dynamically adds transitions between images timed to the audio
+- Manages temporary files and cleanup post-processing
+
+### ☁️ AWS S3 Integration (`s3.ts`)
+
+- Uploads and stores generated video files and metadata
+- Handles listing, retrieving, and deleting videos from S3
+
+---
+
+## 🧑‍💻 Frontend Components
+
+### 📝 Generation Form (`generation-form.tsx`)
+
+- User interface for inputting celebrity details
+- Displays real-time script preview post-submission
+- Toast notifications for progress and success/failure updates
+
+---
+
+## 🛠️ Technology Stack
+
+- **Frontend**: Next.js, React, Radix UI
+- **Backend**: Node.js (via Next.js API routes)
+- **AI Services**:
+  - Google Gemini 1.5 Pro (script generation)
+  - Amazon Polly (text-to-speech)
+  - SERP API (image search)
+- **Media Processing**: FFmpeg
+- **Cloud Storage**: AWS S3
+- **Deployment**: AWS EC2
+
+
+
+
