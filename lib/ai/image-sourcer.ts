@@ -64,15 +64,15 @@ async function searchGoogleImages(searchQuery: string, celebrityName: string, sp
         engine: 'google_images',
         q: fullQuery,
         api_key: SERP_API_KEY,
-        safe: 'active', // Safe search
-        ijn: '0', // First page
-        tbm: 'isch', // Image search
-        tbs: 'isz:l', // Large images
+        safe: 'active', 
+        ijn: '0', 
+        tbm: 'isch', 
+        tbs: 'isz:l', 
       }
     });
 
     if (response.data.images_results && response.data.images_results.length > 0) {
-      // Filter for appropriate image sizes
+     
       const filteredImages = response.data.images_results.filter(img => 
         img.width >= 800 && img.height >= 600 && 
         img.width/img.height <= 2 // Reasonable aspect ratio

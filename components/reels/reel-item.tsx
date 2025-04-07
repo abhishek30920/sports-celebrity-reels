@@ -60,7 +60,7 @@ export function ReelItem({ video, isActive, onNext, onPrevious }: ReelItemProps)
     }
   }
   
-  // Handle swipe gestures for mobile
+  // Handle touch events for mobile swipe gestures
   const handleTouchStart = (e: React.TouchEvent) => {
     const touchStartY = e.touches[0].clientY
     
@@ -110,7 +110,6 @@ export function ReelItem({ video, isActive, onNext, onPrevious }: ReelItemProps)
         className="absolute inset-0 w-full h-full object-cover"
         loop
         playsInline
-       
       />
       
       <div className="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black/80 to-transparent">
@@ -127,31 +126,9 @@ export function ReelItem({ video, isActive, onNext, onPrevious }: ReelItemProps)
         shares={video.shares || 0}
       />
 
-      {/* Desktop navigation indicators */}
-      <div className="hidden md:flex absolute right-6 top-1/2 transform -translate-y-1/2 flex-col gap-2">
-        <button 
-          onClick={(e) => { e.stopPropagation(); onPrevious(); }} 
-          className="p-2 bg-black/40 rounded-full hover:bg-black/60 transition-colors"
-          aria-label="Previous video"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white">
-            <polyline points="18 15 12 9 6 15"></polyline>
-          </svg>
-        </button>
-        <button 
-          onClick={(e) => { e.stopPropagation(); onNext(); }} 
-          className="p-2 bg-black/40 rounded-full hover:bg-black/60 transition-colors"
-          aria-label="Next video"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white">
-            <polyline points="6 9 12 15 18 9"></polyline>
-          </svg>
-        </button>
-      </div>
-
       {/* Desktop scroll hint */}
       <div className="hidden md:block absolute bottom-24 left-1/2 transform -translate-x-1/2 text-white text-opacity-60 text-sm animate-pulse">
-        <p>Scroll or use arrows to navigate</p>
+        <p>Scroll to navigate</p>
       </div>
     </div>
   )

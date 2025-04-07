@@ -1,6 +1,6 @@
 "use client"
 
-import { Heart, Share, Play, Pause, ChevronUp, ChevronDown } from "lucide-react"
+import { Heart, Share, Play, Pause } from "lucide-react"
 import { useState } from "react"
 
 interface ReelControlsProps {
@@ -16,7 +16,10 @@ export function ReelControls({ isPlaying, onPlayPause, onNext, onPrevious, likes
   const [liked, setLiked] = useState(false)
   const [localLikes, setLocalLikes] = useState(likes)
   
-  const handleLike = () => {
+  const handleLike = (e: React.MouseEvent) => {
+    // Stop event propagation to prevent triggering play/pause
+    e.stopPropagation()
+    
     if (liked) {
       setLocalLikes(localLikes - 1)
     } else {
@@ -29,27 +32,14 @@ export function ReelControls({ isPlaying, onPlayPause, onNext, onPrevious, likes
     <div className="absolute right-4 bottom-20 flex flex-col gap-6 z-10">
       <div className="flex flex-col items-center">
         <button 
-          onClick={onPrevious}
-          className="mb-2 p-2 rounded-full bg-black/30 hover:bg-black/50 transition-colors"
-          aria-label="Previous video"
-        >
-          <ChevronUp className="h-6 w-6 text-white" />
-        </button>
-        
-        <button 
-          onClick={onPlayPause}
+          onClick={(e) => {
+            e.stopPropagation();
+            onPlayPause();
+          }}
           className="p-3 rounded-full bg-black/30 hover:bg-black/50 transition-colors"
           aria-label={isPlaying ? "Pause" : "Play"}
         >
           {isPlaying ? <Pause className="h-6 w-6 text-white" /> : <Play className="h-6 w-6 text-white" />}
-        </button>
-        
-        <button 
-          onClick={onNext}
-          className="mt-2 p-2 rounded-full bg-black/30 hover:bg-black/50 transition-colors"
-          aria-label="Next video"
-        >
-          <ChevronDown className="h-6 w-6 text-white" />
         </button>
       </div>
       
@@ -63,7 +53,8 @@ export function ReelControls({ isPlaying, onPlayPause, onNext, onPrevious, likes
       </button>
       
       <button
-        onClick={() => {
+        onClick={(e) => {
+          e.stopPropagation();
           if (navigator.share) {
             navigator.share({
               title: "Check out this sports celebrity reel!",

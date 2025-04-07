@@ -125,11 +125,6 @@ async function getAudioDuration(audioFile: string): Promise<number> {
 }
 
 
-function escapeFFmpegPathForWindows(filePath: string) {
-  return filePath
-    .replace(/\\/g, '\\\\')    // Escape backslashes
-    .replace(/:/g, '\\:');     // Escape colon in drive letters
-}
 
 async function generateVideo(
   imageFiles: string[],

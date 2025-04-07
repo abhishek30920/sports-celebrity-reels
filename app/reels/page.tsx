@@ -15,8 +15,13 @@ export default function ReelsPage() {
           -ms-overflow-style: none; /* IE and Edge */
           scrollbar-width: none; /* Firefox */
         }
+        
+        /* Enable smooth scrolling on the document */
+        html {
+          scroll-behavior: smooth;
+        }
       `}</style>
-      <div className="w-full h-screen max-w-2xl mx-auto relative overflow-hidden">
+      <div className="w-full h-screen max-w-2xl mx-auto relative overflow-y-auto scrollbar-hide snap-y snap-mandatory">
         <ReelContainer />
       </div>
     </main>
