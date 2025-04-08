@@ -102,6 +102,17 @@ User Request → Script Generation → Image Sourcing → Text-to-Speech → Vid
 - **Cloud Storage**: AWS S3
 - **Deployment**: AWS EC2
 
+## ⚙️ Environment Variables
 
+To run the application locally, create a `.env.local` file in the root of your project and add the following:
+
+```env
+AWS_REGION=
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+S3_BUCKET_NAME=
+
+GOOGLE_GENERATIVE_AI_API_KEY=
+SERP_API_KEY=
 
 
